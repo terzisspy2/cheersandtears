@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cheers & Tears — Leave Her a Note</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Caveat:wght@600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #5b7fc7;
+    --blue-deep: #3d5a99;
+    --pink: #e0567f;
+    --pink-soft: #fbe4ec;
+    --sky: #eaf1fb;
+    --cream: #fffdf9;
+    --ink: #2e2a26;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; min-height: 100vh; }
+  body {
+    background: linear-gradient(180deg, var(--sky) 0%, var(--cream) 40%);
+    font-family: 'Quicksand', sans-serif;
+    color: var(--ink);
+    display: flex;
+    justify-content: center;
+    padding: 44px 16px 90px;
+  }
+  .wrap { width: 100%; max-width: 460px; }
+
+  .card {
+    background: var(--cream);
+    border-radius: 22px;
+    position: relative;
+    box-shadow: 0 24px 50px rgba(61,90,153,0.18);
+    overflow: hidden;
+  }
+
+  /* postcard airmail stripe along the top, USA nod */
+  .airmail {
+    height: 9px;
+    background: repeating-linear-gradient(
+      -45deg,
+      var(--pink) 0 12px,
+      var(--cream) 12px 17px,
+      var(--blue) 17px 29px,
+      var(--cream) 29px 34px
+    );
+  }
+
+  .stamp {
+    position: absolute;
+    top: 22px; right: 22px;
+    width: 62px; height: 62px;
+    background: var(--pink-soft);
+    border: 2px dashed var(--blue);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    font-size: 9px;
+    letter-spacing: 1px;
+    color: var(--blue-deep);
+    line-height: 1.4;
+    transform: rotate(6deg);
+  }
+
+  .inner { padding: 30px 30px 34px; }
+
+  h1.title {
+    font-family: 'Baloo 2', sans-serif;
+    font-weight: 800;
+    font-size: 40px;
+    color: var(--blue);
+    text-align: center;
+    margin: 6px 0 0;
+    line-height: 1;
+    letter-spacing: 0.5px;
+  }
+  .script {
+    display: block;
+    font-family: 'Caveat', cursive;
+    font-weight: 700;
+    font-size: 46px;
+    color: var(--pink);
+    margin-top: -6px;
+  }
+
+  .sub {
+    text-align: center;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #6b6459;
+    margin: 14px auto 22px;
+    max-width: 320px;
+  }
+
+  .photo-frame {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    max-height: 220px;
+    background: var(--sky);
+    border: 2px solid var(--blue);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin: 0 auto 22px;
+  }
+  .photo-frame img { width: 100%; height: 100%; object-fit: cover; display: none; }
+  .photo-frame .placeholder {
+    font-family: 'Baloo 2', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 1px;
+    color: var(--blue-deep);
+    text-align: center;
+    opacity: 0.55;
+  }
+
+  .doodle-row { display: flex; justify-content: center; gap: 14px; margin: 0 0 22px; }
+  .doodle-row svg { width: 46px; height: auto; }
+
+  form { text-align: left; }
+  label {
+    display: block;
+    font-family: 'Baloo 2', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--blue-deep);
+    margin: 16px 0 6px;
+  }
+  input[type=text], textarea {
+    width: 100%;
+    background: var(--sky);
+    border: 2px solid transparent;
+    border-radius: 12px;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 500;
+    font-size: 15px;
+    color: var(--ink);
+    padding: 12px 14px;
+    resize: vertical;
+    line-height: 1.5;
+  }
+  input[type=text]:focus, textarea:focus {
+    outline: none;
+    border-color: var(--pink);
+    background: var(--cream);
+  }
+  textarea { min-height: 110px; }
+
+  .send {
+    margin-top: 22px;
+    width: 100%;
+    background: linear-gradient(90deg, var(--blue), var(--pink));
+    color: var(--cream);
+    border: none;
+    padding: 15px 18px;
+    font-family: 'Baloo 2', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: 0.5px;
+    border-radius: 999px;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(224,86,127,0.35);
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+  }
+  .send:hover { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(224,86,127,0.45); }
+  .send:active { transform: translateY(0); }
+  .send:disabled { opacity: 0.55; cursor: default; }
+
+  .status {
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    margin-top: 12px;
+    min-height: 16px;
+    text-align: center;
+    color: var(--pink);
+  }
+
+  .thanks { display: none; text-align: center; padding: 10px 0 4px; }
+  .thanks .seal {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: var(--pink);
+    color: var(--cream);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 16px;
+    font-family: 'Baloo 2', sans-serif;
+    font-size: 24px;
+    box-shadow: 0 8px 20px rgba(224,86,127,0.35);
+  }
+  .thanks h2 {
+    font-family: 'Baloo 2', sans-serif;
+    font-weight: 800;
+    font-size: 24px;
+    color: var(--blue);
+    margin: 0 0 8px;
+  }
+  .thanks p { color: #6b6459; font-size: 14px; }
+
+  footer {
+    text-align: center;
+    margin-top: 26px;
+    font-family: 'Caveat', cursive;
+    font-weight: 600;
+    font-size: 18px;
+    color: var(--blue-deep);
+    opacity: 0.7;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card">
+    <div class="airmail"></div>
+    <div class="inner" style="position:relative;">
+      <div class="stamp">USA<br>2026<br>✈</div>
+
+      <h1 class="title">cheers<span class="script">&amp; goodbye</span></h1>
+      <p class="sub">Two months, one city, more people than we can count. Leave her a little note — she'll open the whole stack at once, later.</p>
+
+      <div class="photo-frame" id="photoFrame">
+        <img id="herPhoto" src="" alt="">
+        <div class="placeholder" id="photoPlaceholder">her photo here</div>
+      </div>
+
+      <div class="doodle-row">
+        <svg viewBox="0 0 60 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M24 4h12v14l6 8v56a4 4 0 01-4 4H22a4 4 0 01-4-4V26l6-8V4z" stroke="#5b7fc7" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M18 46h24v36a4 4 0 01-4 4H22a4 4 0 01-4-4V46z" fill="#e0567f" opacity="0.85"/>
+          <rect x="20" y="60" width="20" height="12" rx="1" fill="#fffdf9" opacity="0.9"/>
+        </svg>
+        <svg viewBox="0 0 40 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 6h16l-3 24v10H15V30L12 6z" stroke="#5b7fc7" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M12.5 34h15v20a2 2 0 01-2 2h-11a2 2 0 01-2-2V34z" fill="#e0567f" opacity="0.85"/>
+          <line x1="20" y1="56" x2="20" y2="80" stroke="#5b7fc7" stroke-width="2.5"/>
+          <ellipse cx="20" cy="82" rx="10" ry="3" stroke="#5b7fc7" stroke-width="2.5"/>
+        </svg>
+        <svg viewBox="0 0 90 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="45" cy="40" rx="38" ry="24" stroke="#5b7fc7" stroke-width="2.5"/>
+          <path d="M8 40h74M45 16v48M18 22l54 36M72 22l-54 36" stroke="#5b7fc7" stroke-width="1.4" opacity="0.6"/>
+          <circle cx="30" cy="30" r="3.5" fill="#e0567f"/>
+          <circle cx="50" cy="24" r="3.5" fill="#e0567f"/>
+          <circle cx="60" cy="42" r="3.5" fill="#e0567f"/>
+          <circle cx="36" cy="48" r="3.5" fill="#e0567f"/>
+        </svg>
+      </div>
+
+      <form id="noteForm">
+        <label for="fromField">your name</label>
+        <input type="text" id="fromField" placeholder="e.g. Nick" maxlength="40" required>
+
+        <label for="msgField">your note to her</label>
+        <textarea id="msgField" placeholder="short and honest beats long and generic 💌" maxlength="900" required></textarea>
+
+        <button type="submit" class="send" id="sendBtn">seal &amp; send ✈</button>
+        <div class="status" id="statusText"></div>
+      </form>
+
+      <div class="thanks" id="thanksBox">
+        <div class="seal">✓</div>
+        <h2>sealed!</h2>
+        <p>your note is on its way to her — she won't see it until the day comes.</p>
+      </div>
+
+    </div>
+  </div>
+  <footer>every note stays hidden until she opens them together</footer>
+</div>
+
+<iframe name="hidden_submit_frame" style="display:none;"></iframe>
+
+<script>
+  // =====================================================================
+  // SETUP — replace these three values once you've made your Google Form.
+  // =====================================================================
+  const GOOGLE_FORM_ACTION_URL = "https://docs.google.com/forms/d/e/1FAIpQLScjYOUrUrzEDySW-0V8x465V1jswalc9Zq_ZrAVUneMDSkysw/formResponse";
+  const ENTRY_NAME = "entry.1862991319";
+  const ENTRY_MESSAGE = "entry.266725552";
+
+  // Her photo or a sticker — just drop an image URL in here.
+  const HER_PHOTO_URL = ""; // e.g. "image.png"
+  // =====================================================================
+
+  if (HER_PHOTO_URL) {
+    const img = document.getElementById('herPhoto');
+    img.src = HER_PHOTO_URL;
+    img.style.display = 'block';
+    document.getElementById('photoPlaceholder').style.display = 'none';
+  }
+
+  const form = document.getElementById('noteForm');
+  const sendBtn = document.getElementById('sendBtn');
+  const statusText = document.getElementById('statusText');
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    const from = document.getElementById('fromField').value.trim();
+    const msg = document.getElementById('msgField').value.trim();
+    if (!from || !msg) return;
+
+    sendBtn.disabled = true;
+    statusText.textContent = 'sealing your note…';
+
+    const tempForm = document.createElement('form');
+    tempForm.action = GOOGLE_FORM_ACTION_URL;
+    tempForm.method = 'POST';
+    tempForm.target = 'hidden_submit_frame';
+
+    const nameInput = document.createElement('input');
+    nameInput.type = 'hidden';
+    nameInput.name = ENTRY_NAME;
+    nameInput.value = from;
+    tempForm.appendChild(nameInput);
+
+    const msgInput = document.createElement('input');
+    msgInput.type = 'hidden';
+    msgInput.name = ENTRY_MESSAGE;
+    msgInput.value = msg;
+    tempForm.appendChild(msgInput);
+
+    document.body.appendChild(tempForm);
+    tempForm.submit();
+    document.body.removeChild(tempForm);
+
+    setTimeout(function () {
+      form.style.display = 'none';
+      document.getElementById('thanksBox').style.display = 'block';
+    }, 700);
+  });
+</script>
+</body>
+</html>
